@@ -1,0 +1,25 @@
+# Unity-generated state; commit Assets (including .meta), Packages and ProjectSettings.
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Bb]uild/
+/[Bb]uilds/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/[Cc]onfigs/
+/LocalData/
+/Artifacts/
+/TestResults/
+/*.csproj
+/*.sln
+/*.slnx
+/*.suo
+/*.user
+
+# Local secrets and Unity activation artefacts must never be committed.
+.env
+.env.*
+*.ulf
+*.alf

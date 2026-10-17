@@ -2,6 +2,8 @@
 
 This is a C# 12 / .NET 8 desktop checkpoint crowd simulator using Silk.NET, OpenGL and Dear ImGui.
 
+For Unity migration work, first read `UnityProject/AGENTS.md`, `UnityProject/MIGRATION_STATUS.md` and `UnityProject/MIGRATION_PLAN.md`. Work only on `unity-migration`; preserve the original application and tests. Update the status and commit each verified stage locally, then stop for explicit approval before pushing that checkpoint. Never push or merge to `main` as part of migration work.
+
 ## Source map
 
 - `Core/`: deterministic simulation, queues/gates, SFM, responders, geometry, settings and metrics; coordinated by `CrowdSimulation.cs`.
