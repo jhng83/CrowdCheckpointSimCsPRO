@@ -1,8 +1,10 @@
 # Cloud Unity validation: prepared, not executed
 
+**Current direction: cloud runner setup is deferred.** Preserve this historical research and opt-in tooling; do not provision or enable a runner. Source migration continues with portable/reference checks, while S1 stays incomplete. A cloud runner is optional infrastructure; actual Unity validation still needs a licensed Editor somewhere when that validation is resumed. Do not access the user's computer.
+
 Recorded 2026-10-18. S1 remains **incomplete**. The existing Codex cloud machine has no usable Unity installation/licence and cannot reach Unity installer/registry endpoints. A separate cloud CI machine can have different network access. **No computer belonging to the user is accessed or required by this design.** No VM, subscription, paid runner, GitHub setting or CI run was created by this checkpoint.
 
-The user has **no confirmed existing CI licence**. Do not assume a paid entitlement, transferable Personal licence or permission to purchase anything. Actual Unity validation remains blocked until supported cloud activation and a runner are available.
+The user has **no confirmed existing CI licence**. Do not assume a paid entitlement, transferable Personal licence or permission to purchase anything. Actual Unity validation requires a supported licensed Editor environment. The deferred cloud option below would additionally require supported cloud activation and a runner.
 
 ## Runner options investigated
 

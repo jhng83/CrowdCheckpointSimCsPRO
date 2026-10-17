@@ -26,7 +26,19 @@ class FoundationValidationTests(unittest.TestCase):
     def test_intact_fixture_passes_static_checks(self):
         assets, assemblies = validate_project(self.project)
         self.assertGreater(assets, 0)
-        self.assertEqual(assemblies, 4)
+        self.assertEqual(assemblies, 5)
+
+    def test_simulation_engine_dependency_is_rejected(self):
+        self.change("Assets/Simulation/CrowdCheckpoint.Simulation.asmdef",
+                    '"noEngineReferences": true', '"noEngineReferences": false')
+        with self.assertRaisesRegex(ValidationError, "Simulation assembly"):
+            validate_project(self.project)
+
+    def test_simulation_foundation_dependency_is_rejected(self):
+        self.change("Assets/Simulation/CrowdCheckpoint.Simulation.asmdef",
+                    '"references": []', '"references": ["CrowdCheckpoint.Unity.Foundation"]')
+        with self.assertRaisesRegex(ValidationError, "Simulation assembly"):
+            validate_project(self.project)
 
     def test_missing_script_meta_is_rejected(self):
         (self.project / "Assets/Foundation/FoundationBootstrap.cs.meta").unlink()

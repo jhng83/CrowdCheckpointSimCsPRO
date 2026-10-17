@@ -1,10 +1,10 @@
-# Unity migration foundation (S1, not validated in Unity)
+# Unity migration source (incomplete; not validated in Unity)
 
-This is an **incomplete foundation**, not the ported simulator. The tracked scene has an orthographic camera and a wired diagnostic component. Its temporary OnGUI message is a **placeholder**, not the planned uGUI interface. No crowd simulation, setup controls, metrics, persistence or recording has been implemented.
+This is an **incomplete port**. The tracked scene has an orthographic camera and a wired diagnostic component. Its temporary OnGUI message is a **placeholder**, not the planned uGUI interface. Portable enums, timing, radius checks and quota helpers exist under `Assets/Simulation`; the scene does not run a crowd simulation. Setup controls, metrics UI, persistence and recording remain unimplemented.
 
 Start with [MIGRATION_STATUS.md](MIGRATION_STATUS.md) and [MIGRATION_PLAN.md](MIGRATION_PLAN.md). Use branch `unity-migration`; preserve the root .NET reference app/tests. The foundation is authored but **Unity import/compilation, tests, visuals and builds have not run**.
 
-Cloud-only CI setup, runner/licence requirements and dated cost research are in [Documentation/CLOUD_CI.md](Documentation/CLOUD_CI.md). The prepared workflow runs reference checks on migration-branch pushes and **skips Unity by default** until a licensed cloud Windows runner is explicitly enabled. No access to the user's computer is required. This is prepared automation, not evidence of any completed Unity run.
+**No cloud runner is being set up:** the user deferred it. Source stages continue with portable/reference checks while S1 stays incomplete. The preserved, disabled-by-default cloud setup research is in [Documentation/CLOUD_CI.md](Documentation/CLOUD_CI.md). Migration-branch pushes run ordinary .NET/Python checks; the opt-in Unity job is not enabled by this work. Do not access the user's computer.
 
 ## Toolchain requests and prerequisites
 
@@ -19,7 +19,7 @@ Cloud-only CI setup, runner/licence requirements and dated cost research are in 
 2. Let UPM resolve the requested packages and wait for compilation. Record all failures and any necessary version changes; do not disable verification.
 3. Run **Tools > Crowd Checkpoint > Migration > Configure S1 Foundation**. This creates actual URP renderer/pipeline assets under `Assets/Settings/`, assigns graphics/quality settings, selects Windows Mono/.NET Standard and configures the scene. It refuses to overwrite an unrelated asset. This command is required because no Editor has generated those assets/settings yet.
 4. Open `Assets/Scenes/MigrationFoundation.unity` and enter Play Mode. Expect only an orthographic background and the explicit S1 diagnostic message. Do not expect a simulator or functional application controls.
-5. Run EditMode and PlayMode tests in Test Runner. There are **two authored EditMode tests and one PlayMode test**, all currently unrun.
+5. Run EditMode and PlayMode tests in Test Runner. There are **seven authored EditMode tests (two foundation and five domain helpers) and one PlayMode test**, all currently unrun in Unity.
 6. Review/commit Editor-generated source settings, `.meta` files and the real package lockfile in the next checkpoint; never commit `Library`, `Temp`, `UserSettings`, logs or licence files. Update the migration status with actual results. S1 stays incomplete until its gates pass.
 
 ## Batch entry points (not executed yet)
@@ -48,6 +48,10 @@ python3 UnityProject/Tools/validate_foundation.py --check-dotnet
 dotnet restore CrowdCheckpointSim.sln --disable-parallel
 dotnet build CrowdCheckpointSim.sln --no-restore -m:2
 dotnet test tests/CrowdCheckpointSim.Tests/CrowdCheckpointSim.Tests.csproj --no-build --no-restore
+dotnet restore UnityProject/Validation/DomainParity.Tests/DomainParity.Tests.csproj --disable-parallel
+dotnet test UnityProject/Validation/DomainParity.Tests/DomainParity.Tests.csproj --no-restore
 ```
 
 The Python checker verifies static JSON/GUID/scene references and actual MSBuild compile isolation when requested. It does **not** validate Unity YAML deserialization, package resolution, C# compilation, rendering or runtime behaviour. See the status for measured results and exact next steps.
+
+See [Validation/README.md](Validation/README.md) for the .NET Standard 2.1 / C# 9 build and direct reference comparisons. These run on .NET, not Unity's runtime.

@@ -81,6 +81,9 @@ def validate_project(project, check_dotnet=False):
                     "Unresolved local assembly reference: " + reference)
     require(local_assemblies["CrowdCheckpoint.Unity.Editor"].get("includePlatforms") == ["Editor"],
             "Editor assembly must remain Editor-only")
+    domain = local_assemblies.get("CrowdCheckpoint.Simulation", {})
+    require(domain.get("noEngineReferences") is True and domain.get("references") == [],
+            "Simulation assembly must have no UnityEngine or assembly dependencies")
 
     scene = read(project / SCENE)
     bootstrap_guid = meta_guid(project / (BOOTSTRAP + ".meta"))

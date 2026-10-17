@@ -72,6 +72,12 @@ class CloudResultGateTests(unittest.TestCase):
         with self.assertRaises(ResultError):
             unity_results(self.result, "EditMode")
 
+    def test_foundation_only_run_cannot_hide_missing_domain_tests(self):
+        names = [name for name in REQUIRED_CASES["EditMode"] if ".FoundationSceneTests." in name]
+        self.unity_fixture(names=names)
+        with self.assertRaises(ResultError):
+            unity_results(self.result, "EditMode")
+
     def test_failed_unity_run_is_rejected(self):
         self.unity_fixture(result="Failed", failed=1, passed=1)
         with self.assertRaises(ResultError):

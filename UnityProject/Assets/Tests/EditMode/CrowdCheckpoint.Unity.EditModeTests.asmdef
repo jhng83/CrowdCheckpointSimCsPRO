@@ -2,9 +2,14 @@
   "name": "CrowdCheckpoint.Unity.EditModeTests",
   "references": [
     "CrowdCheckpoint.Unity.Foundation",
-    "CrowdCheckpoint.Unity.Editor"
+    "CrowdCheckpoint.Unity.Editor",
+    "CrowdCheckpoint.Simulation"
   ],
-  "includePlatforms": ["Editor"],
-  "optionalUnityReferences": ["TestAssemblies"],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
   "autoReferenced": false
 }

@@ -49,6 +49,10 @@ jobs:
           path: UnityProject/Artifacts/Reference/reference.trx
           retention-days: 2
           if-no-files-found: warn
+      - name: Compile portable helpers and compare with reference on .NET
+        run: |
+          dotnet restore UnityProject/Validation/DomainParity.Tests/DomainParity.Tests.csproj --disable-parallel
+          dotnet test UnityProject/Validation/DomainParity.Tests/DomainParity.Tests.csproj --no-restore
 
   unity-cloud:
     # Opt in only after provisioning/licensing a CLOUD VM and reviewing its costs.
