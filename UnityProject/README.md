@@ -4,6 +4,8 @@ This is an **incomplete foundation**, not the ported simulator. The tracked scen
 
 Start with [MIGRATION_STATUS.md](MIGRATION_STATUS.md) and [MIGRATION_PLAN.md](MIGRATION_PLAN.md). Use branch `unity-migration`; preserve the root .NET reference app/tests. The foundation is authored but **Unity import/compilation, tests, visuals and builds have not run**.
 
+Cloud-only CI setup, runner/licence requirements and dated cost research are in [Documentation/CLOUD_CI.md](Documentation/CLOUD_CI.md). The prepared workflow runs reference checks on migration-branch pushes and **skips Unity by default** until a licensed cloud Windows runner is explicitly enabled. No access to the user's computer is required. This is prepared automation, not evidence of any completed Unity run.
+
 ## Toolchain requests and prerequisites
 
 - Exact requested Editor: **6000.3.26f1**. The version identity was verified in Unity's official reference-source tag, not by installing/running the Editor. This does not establish current download availability or compatibility.

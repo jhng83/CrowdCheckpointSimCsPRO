@@ -1,0 +1,94 @@
+name: Unity migration cloud validation
+
+on:
+  push:
+    branches: [unity-migration]
+    paths:
+      - '**/*.cs'
+      - '**/*.csproj'
+      - '**/*.sln'
+      - 'UnityProject/**'
+      - '.github/workflows/unity-cloud-validation.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: unity-migration-validation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  reference-checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+        with:
+          dotnet-version: '8.0.426'
+      - name: Static foundation and result-gate regression tests
+        run: |
+          python3 UnityProject/Tools/validate_foundation.py --check-dotnet
+          python3 -m unittest discover -s UnityProject/Tools -p 'test_*.py' -v
+      - name: Preserve the original reference build and tests
+        run: |
+          dotnet restore CrowdCheckpointSim.sln --disable-parallel
+          dotnet build CrowdCheckpointSim.sln --no-restore -m:2
+          dotnet test tests/CrowdCheckpointSim.Tests/CrowdCheckpointSim.Tests.csproj --no-build --no-restore --results-directory UnityProject/Artifacts/Reference --logger 'trx;LogFileName=reference.trx'
+          python3 UnityProject/Tools/ci_results.py reference UnityProject/Artifacts/Reference/reference.trx
+      - name: Retain reference test evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dotnet-reference-${{ github.run_id }}-${{ github.run_attempt }}
+          path: UnityProject/Artifacts/Reference/reference.trx
+          retention-days: 2
+          if-no-files-found: warn
+
+  unity-cloud:
+    # Opt in only after provisioning/licensing a CLOUD VM and reviewing its costs.
+    if: github.repository == 'jhng83/CrowdCheckpointSimCsPRO' && github.ref == 'refs/heads/unity-migration' && vars.UNITY_CLOUD_CI_ENABLED == 'true'
+    needs: reference-checks
+    runs-on: [self-hosted, Windows, X64, unity-cloud-6000.3.26f1]
+    environment: unity-cloud-validation
+    timeout-minutes: 75
+    defaults:
+      run:
+        shell: powershell
+    env:
+      UNITY_EDITOR_PATH: ${{ vars.UNITY_CLOUD_EDITOR_PATH }}
+      BUILD_WINDOWS: ${{ vars.UNITY_CLOUD_BUILD_WINDOWS }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Configure twice, validate scene, run Unity tests and optionally build
+        run: |
+          $validationArguments = @()
+          if ($env:BUILD_WINDOWS -eq 'true') { $validationArguments += '--build-windows' }
+          python UnityProject/Tools/run_unity_cloud.py @validationArguments
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Retain sanitized results and generated source settings for review
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: unity-foundation-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: UnityProject/Artifacts/UnityCloud/reports/${{ github.run_id }}-${{ github.run_attempt }}/
+          retention-days: 2
+          if-no-files-found: warn
+      - name: Retain the complete optional Windows foundation player
+        if: success() && vars.UNITY_CLOUD_BUILD_WINDOWS == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: windows-foundation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: UnityProject/Artifacts/WindowsFoundation/
+          retention-days: 2
+          if-no-files-found: error

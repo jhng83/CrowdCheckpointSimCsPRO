@@ -103,6 +103,8 @@ Each row is a separate local checkpoint and push-approval stop. Split further if
 
 S1 is split for interruption recovery: **S1a** authors the foundation/version requests and verifies static integrity/.NET isolation; **S1b** resolves packages with the licensed Editor, generates real URP/project settings and lockfile, compiles and runs the smoke checks. S1a does not complete S1 or authorize starting S2. The diagnostic OnGUI label is a temporary placeholder, not an approved replacement for uGUI or any simulator feature.
 
+**S1-CI** prepares cloud-runner orchestration and strict evidence gates while S1b remains blocked. See `Documentation/CLOUD_CI.md` for the dedicated Windows cloud VM option, alternatives, licence/setup prerequisites and dated pricing. The user requested cloud-only investigation and has no confirmed existing CI entitlement. Do not access a personal computer, provision paid resources, buy a licence, enable the Unity job or treat local CI-fixture tests as actual Unity validation. S1 remains incomplete and S2 is not started by this checkpoint.
+
 ## Validation and completion criteria
 
 - Keep all 270 original cases; implement equivalent Unity coverage without weakening assertions. Use separate test-process/reference fixtures where matching namespaces would conflict. Cover camera/scaling/gait/path helpers as well as core logic.
