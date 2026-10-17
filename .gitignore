@@ -1,0 +1,19 @@
+bin/
+obj/
+publish/
+.vs/
+*.user
+*.suo
+configs/
+recordings/
+
+# Generated build files
+**/bin/
+**/obj/
+**/publish/
+.vs/
+
+# Recordings and local settings
+**/recordings/
+*.user
+*.suo
