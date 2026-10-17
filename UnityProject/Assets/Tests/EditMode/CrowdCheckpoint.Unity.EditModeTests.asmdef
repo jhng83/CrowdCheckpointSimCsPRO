@@ -1,0 +1,10 @@
+{
+  "name": "CrowdCheckpoint.Unity.EditModeTests",
+  "references": [
+    "CrowdCheckpoint.Unity.Foundation",
+    "CrowdCheckpoint.Unity.Editor"
+  ],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

@@ -23,5 +23,6 @@
 
   <ItemGroup>
     <Compile Remove="tests/**/*.cs" />
+    <Compile Remove="UnityProject/**/*.cs" />
   </ItemGroup>
 </Project>

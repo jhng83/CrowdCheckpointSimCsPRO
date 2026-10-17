@@ -1,0 +1,7 @@
+{
+  "name": "CrowdCheckpoint.Unity.PlayModeTests",
+  "references": ["CrowdCheckpoint.Unity.Foundation"],
+  "includePlatforms": [],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

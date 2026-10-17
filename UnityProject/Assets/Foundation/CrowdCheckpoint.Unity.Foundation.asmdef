@@ -1,0 +1,13 @@
+{
+  "name": "CrowdCheckpoint.Unity.Foundation",
+  "rootNamespace": "CrowdCheckpoint.Unity.Foundation",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

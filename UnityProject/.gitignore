@@ -23,3 +23,7 @@
 .env.*
 *.ulf
 *.alf
+
+# Local Python validation caches.
+__pycache__/
+*.pyc

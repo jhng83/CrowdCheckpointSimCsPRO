@@ -7,14 +7,14 @@ Reference commit: `8786c52f5be7aea683a9d14b69682bf07ed2f6e8`. Reference app: roo
 ## Architecture and proposed toolchain
 
 - Complete Unity project under `UnityProject/`, including wired scenes, UI, prefabs/assets, materials/fonts, settings, packages/lockfile, tests, build entry points and run instructions. Preserve the original application and tests as a reference.
-- Proposed editor: Unity 6.3 LTS (`6000.3.x`); exact patch is NOT yet selected or verified. Select a supported patch after checking official release information, installed modules and licence availability; pin it in `ProjectSettings/ProjectVersion.txt` and status. Do not invent a version pin.
+- S1a requests Unity **6000.3.26f1**, whose version identity was verified in Unity's official reference-source tag. See `Documentation/TOOLCHAIN.md` for immutable provenance. This is NOT an installed/validated Editor: release API/download/registry access is blocked here. Verify the actual Editor/revision, support and modules before completing S1; do not invent an installer checksum or Editor revision.
 - Proposed runtime profile: .NET Standard 2.1, Unity-supported C# syntax; initial Windows x86-64 Mono player. IL2CPP is a separately validated target, not an assumed requirement.
 - Proposed presentation: URP orthographic 2.5D meshes/materials, uGUI/TextMeshPro and Input System. Preserve the reference projection, palette, shading, gait, markers, picking and window behaviour. Pool/batch visual objects without changing simulation order. No physics/NavMesh-based movement.
 - Reuse core algorithms as a Unity-compatible source assembly with no UnityEngine dependency. Retain System.Numerics within simulation and convert only for presentation. Translate unsupported file-scoped namespaces, required/init/record-struct/collection syntax and runtime APIs with equivalent invariants/value semantics. Explicitly supply imports formerly implicit in the SDK.
 - Audit APIs such as ThrowIfNull, generic Enum.IsDefined, Random.Shared and MathF.Tau. Test seeded RNG sequences and floating-point results against .NET 8; do not assume Unity's runtime gives identical trajectories. Preserve random-call order.
 - Adapt camera, responsive-scale and humanoid-animation mathematics. Rebuild Silk.NET lifecycle, ImGui UI/drawing and framebuffer capture in Unity.
 - Proposed persistence: Unity-supported Newtonsoft JSON package, explicit DTOs/converters maintaining the existing JSON contract. Proposed recording: compatibility spike using OpenCvSharp 4.13.0.20260627's existing .NET Standard assembly and Windows native runtime; Unity full-frame capture replaces GL readback. A runtime recorder is required, not an Editor-only substitute.
-- Pin every actual Unity package and native/managed dependency after compatibility validation; retain licences/notices. Proposed packages are NOT installed dependencies.
+- `Packages/manifest.json` pins S1a version requests with provenance in `Documentation/TOOLCHAIN.md`; they are NOT installed/resolved dependencies. Complete actual package compatibility validation and commit the real UPM lockfile in S1b. Pin later native/managed dependencies and retain licences/notices.
 - Windows builds use portable `configs` and `recordings` folders beside the executable; proposed Editor equivalents are ignored project-local folders. Any path, codec, appearance or behaviour difference needs an explicit decision and user approval before implementing a divergence.
 - Root SDK compile globs include descendant scripts: before adding Unity C#, add an explicit `UnityProject/**/*.cs` compile exclusion while retaining the original target, dependencies and tests.
 
@@ -100,6 +100,8 @@ Each row is a separate local checkpoint and push-approval stop. Split further if
 | S11 | Recording lifecycle/resize/failure completion | Real Windows pause/stop/restart/setup/mode/close/error cases finalize correctly. |
 | S12 | Reproducible CI and full Windows distribution | Clean-checkout original + Unity jobs pass; complete player launches independently of Editor. |
 | S13 | Final parity, desktop/performance validation and run/build docs | All requirements checked; differences approved; remaining limitations accurately documented. |
+
+S1 is split for interruption recovery: **S1a** authors the foundation/version requests and verifies static integrity/.NET isolation; **S1b** resolves packages with the licensed Editor, generates real URP/project settings and lockfile, compiles and runs the smoke checks. S1a does not complete S1 or authorize starting S2. The diagnostic OnGUI label is a temporary placeholder, not an approved replacement for uGUI or any simulator feature.
 
 ## Validation and completion criteria
 
