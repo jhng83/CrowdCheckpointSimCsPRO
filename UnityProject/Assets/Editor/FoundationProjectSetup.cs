@@ -136,6 +136,42 @@ namespace CrowdCheckpoint.Unity.Editor
             }
         }
 
+        public static void ValidateConfiguration()
+        {
+            RequirePinnedEditor();
+            var pipeline = AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(PipelinePath);
+            var renderer = AssetDatabase.LoadAssetAtPath<UniversalRendererData>(RendererPath);
+            if (pipeline == null || renderer == null || GraphicsSettings.defaultRenderPipeline != pipeline)
+                throw new InvalidOperationException("Foundation URP assets/global assignment are incomplete.");
+
+            int previousQuality = QualitySettings.GetQualityLevel();
+            try
+            {
+                for (int index = 0; index < QualitySettings.names.Length; index++)
+                {
+                    QualitySettings.SetQualityLevel(index, false);
+                    if (QualitySettings.renderPipeline != pipeline)
+                        throw new InvalidOperationException("A quality level does not use the foundation pipeline.");
+                }
+            }
+            finally
+            {
+                QualitySettings.SetQualityLevel(previousQuality, false);
+            }
+
+            if (PlayerSettings.GetScriptingBackend(NamedBuildTarget.Standalone) != ScriptingImplementation.Mono2x ||
+                PlayerSettings.GetApiCompatibilityLevel(NamedBuildTarget.Standalone) != ApiCompatibilityLevel.NET_Standard ||
+                PlayerSettings.defaultScreenWidth != 1500 || PlayerSettings.defaultScreenHeight != 900 ||
+                PlayerSettings.fullScreenMode != FullScreenMode.Windowed || !PlayerSettings.resizableWindow ||
+                EditorSettings.serializationMode != SerializationMode.ForceText || EditorSettings.enterPlayModeOptionsEnabled)
+                throw new InvalidOperationException("Foundation player/editor settings do not match Configure.");
+
+            var scenes = EditorBuildSettings.scenes;
+            if (scenes.Length != 1 || scenes[0].path != ScenePath || !scenes[0].enabled)
+                throw new InvalidOperationException("Foundation build scene is not configured.");
+            ValidateScene();
+        }
+
         private static T LoadOrRejectDifferentAsset<T>(string path) where T : UnityEngine.Object
         {
             var existing = AssetDatabase.LoadMainAssetAtPath(path);

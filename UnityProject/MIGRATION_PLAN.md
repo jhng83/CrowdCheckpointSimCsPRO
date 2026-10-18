@@ -105,6 +105,8 @@ S1 is split for interruption recovery: **S1a** authors the foundation/version re
 
 **S1-CI** prepared cloud-runner orchestration and strict evidence gates while S1b remains blocked. Cloud runner setup is now deferred; preserve the work without enabling/provisioning it. See `Documentation/CLOUD_CI.md` for historical investigation. Do not access a personal computer, buy a licence or treat local fixtures as Unity validation.
 
+**S1c** completes runner-independent preparation: a shared actual-Editor command, retained cloud wrapper/public API, configuration validation, idempotence/scene-preservation tests and an explicit acceptance checklist (`Documentation/S1_CHECKLIST.md`). This is a source/preparation checkpoint, not completion of S1b. A cloud runner is not a gate; real Editor/package/settings/import/compile/tests still are. Defer cloud setup and leave generated lock/settings absent until the Editor creates them.
+
 Split S2 into reviewable source checkpoints: **S2a** enums, operator timing/acquisition and quota helpers, .NET Standard 2.1 / C# 9 compilation, direct original comparisons and shared Unity fixtures; **S2b** configuration/domain models; **S2c** geometry/math/RNG fixtures and compatibility decisions. Scope may split further. All S2 Unity gates remain outstanding until actual Editor execution. See `Validation/README.md` for S2a's mapping and NaN-input uncertainty; preserve the original contract pending an explicit behavior decision.
 
 ## Validation and completion criteria

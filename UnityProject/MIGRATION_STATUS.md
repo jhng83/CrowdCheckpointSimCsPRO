@@ -1,6 +1,6 @@
 # Unity migration status
 
-Last updated: 2026-10-17 (UTC); earlier evidence below retains its recorded timezone/date.
+Last updated: 2026-10-18 (Asia/Singapore).
 
 ## Read this first
 
@@ -8,13 +8,13 @@ Last updated: 2026-10-17 (UTC); earlier evidence below retains its recorded time
 - Branch: `unity-migration`. Preserve the original app and tests; never push/merge to `main` for this migration.
 - Reference: `8786c52f5be7aea683a9d14b69682bf07ed2f6e8`. GitHub `main` remained at that SHA when this task resumed.
 - **S0 publication verified:** remote `unity-migration` matched `9c22095aca99d6c5f61015efce7d24a5adfa0a52`, which the user approved and pushed. Do not ask to push S0 again.
-- **S1a publication verified:** remote `unity-migration` matched approved checkpoint `8b47e9c0505f8add22a3a03e00e93c2bbcbf74e6` when this task resumed. Do not ask to push S1a again.
-- Latest local checkpoint: **S2a, the commit containing this revision**; identify it with `git log -1 --format='%H %s'` and reconcile later history on resume.
-- **S1-CI publication verified:** remote `unity-migration` matches approved `10b229dd0c939ea2bc0aae4d7b3591676b9ed07f`. **S2a publication state at preparation: local only; stop for approval to push this specific new checkpoint.** Prior approvals do not authorize it.
-- **Overall S1: implemented / unvalidated, externally blocked; NOT complete.** Foundation and cloud-CI orchestration are authored. Local static/result-gate checks pass; no Unity import/package resolution/compilation, Unity tests, visual check or Windows build has run. GitHub job results after S1-CI publication were not verified. A skipped CI Unity job must never count as validation.
+- **S1a publication verified:** remote `unity-migration` matched approved checkpoint `8b47e9c0505f8add22a3a03e00e93c2bbcbf74e6` at the earlier S1-CI resume. Do not ask to push S1a again.
+- Latest local checkpoint: **S1c, the commit containing this revision**; latest pushed checkpoint before this work is S2a `3acf45819a6fe807c0ece3bbbdb525bafdd71450`. Identify it with `git log -1 --format='%H %s'` and reconcile later history on resume.
+- **S1-CI publication previously verified:** remote `unity-migration` matched approved `10b229dd0c939ea2bc0aae4d7b3591676b9ed07f`. **S2a publication verified:** remote unity-migration matches approved `3acf45819a6fe807c0ece3bbbdb525bafdd71450`. **S1c publication state at preparation: local only; stop for approval to push this specific new checkpoint.** Prior approvals do not authorize it.
+- **Overall S1: source/preparation implemented; actual Editor work blocked; NOT complete.** Foundation, standalone validation and optional cloud-CI orchestration are authored. A cloud runner is not required for acceptance. Local static/result-gate checks pass; no Unity import/package resolution/compilation, Unity tests, visual check or Windows build has run. GitHub job results after S1-CI publication were not verified. A skipped CI Unity job must never count as validation.
 - **Application feature parity: 0 completed migrated application features.** S2a helpers are implemented and checked on .NET, not connected to the placeholder scene. No crowd movement, responder state machines, application controls, metrics UI, persistence or recording has been ported. The exact-version project scaffold is incomplete until its licensed Editor/UPM validation and generated source settings are committed.
-- Read root `AGENTS.md`, `UnityProject/AGENTS.md`, `MIGRATION_PLAN.md`, `README.md`, `Documentation/TOOLCHAIN.md` and **`Documentation/CLOUD_CI.md`**. The latter records cloud setup, licence blockers and researched costs. No chat history is needed.
-- **Latest user constraints:** no cloud runner; defer provisioning/licensing research. Continue source migration without a runner, keep S1 incomplete until actual Unity validation, and do not access the user's computer. The user reports no confirmed existing CI licence. No subscriptions, machines, paid jobs or personal-computer connections were created.
+- Read root `AGENTS.md`, `UnityProject/AGENTS.md`, `MIGRATION_PLAN.md`, `README.md`, `Documentation/TOOLCHAIN.md`, **`Documentation/S1_CHECKLIST.md`** and `Documentation/CLOUD_CI.md`. The latter records cloud setup, licence blockers and researched costs. No chat history is needed.
+- **Latest user constraints:** complete feasible S1 work without setting up a cloud runner; preserve completed migration work. Keep actual Unity checks explicit and S1 incomplete until they pass; do not access the user's computer or provision services. The user reports no confirmed existing CI licence. No subscriptions, machines, paid jobs or personal-computer connections were created.
 
 ## Stage ledger
 
@@ -23,6 +23,7 @@ Last updated: 2026-10-17 (UTC); earlier evidence below retains its recorded time
 | S0 - resumable foundation | Complete; published | Checkpoint 9c22095 verified on GitHub; original handoff retained. |
 | S1a - authored foundation and isolation | Published; Unity unvalidated | Exact version requests/provenance, tracked scene and metadata, assemblies, setup/build commands and unrun Unity tests. This is a partial S1 checkpoint, not an accepted Unity stage. |
 | S1-CI - cloud validation preparation | Published; Unity unrun, hosted results unverified | Disabled-by-default Unity workflow, real-Editor receipt/result gates, safe source handoff, cloud runner/licence/cost instructions. No cloud service is provisioned. |
+| S1c - runner-independent preparation | Implemented / locally checked; Unity unvalidated | Standalone command, retained cloud API/guards, full configuration validation, two additional unrun Unity tests and S1 checklist. No runner set up. |
 | S1b - finish S1 with actual Unity | Blocked / not run | Licensed Editor/package access needed, then actual settings/lock, compilation and Unity checks; runner is optional. Validation deferred; source stages may proceed without accepting S1 (latest user instruction). |
 | S2 - domain helpers and fixtures | S2a implemented / Unity unvalidated; stage incomplete | Four portable helper sources; .NET Standard 2.1/C# 9 build and 30 .NET checks pass. Five new Unity tests unrun. Config/models/math/RNG remain. |
 | S3 - movement/gates/accounting | Not started | Core port and corresponding Unity/reference tests. |
@@ -125,7 +126,7 @@ python3 UnityProject/Tools/ci_results.py reference UnityProject/Artifacts/Refere
 actionlint -shellcheck= .github/workflows/unity-cloud-validation.yml
 ```
 
-## S2a implementation and actual validation
+## Historical S2a implementation and actual validation
 
 - Confirmed pushed HEAD/remote migration branch `10b229dd0c939ea2bc0aae4d7b3591676b9ed07f`, clean checkout, and unchanged remote main `8786c52f5be7aea683a9d14b69682bf07ed2f6e8` before editing. Original source/project/tests are untouched in this checkpoint.
 - Adapted four exact-reference source files under `Assets/Simulation`: SimulationEnums, OperatorTiming, OperatorAcquisition and DetectionQuotaTracker. Only block namespaces, explicit System imports and the equivalent NaN/Infinity radius guard differ. Preserve math order and current quota rules.
@@ -156,6 +157,41 @@ actionlint -shellcheck= .github/workflows/unity-cloud-validation.yml
 git diff --check
 ```
 
+## Current S1c work and actual validation (2026-10-18, Asia/Singapore)
+
+- Verified sanitized repository URL, clean branch `unity-migration`, pushed/current HEAD `3acf45819a6fe807c0ece3bbbdb525bafdd71450` and unchanged remote main `8786c52f5be7aea683a9d14b69682bf07ed2f6e8` before editing. Preserved all S2a simulation helpers/tests and existing asset GUIDs. Original app/project/tests and package requests are unchanged.
+- Rechecked PATH for Unity/UnityHub, common installation directories and presence of editor/licence/cloud-runner environment bindings without printing values. No usable Editor/licence was found. No runner, VM, subscription, activation or personal-computer connection was created.
+- Added `Tools/run_unity_validation.py`: standalone command takes an explicit already licensed Editor path (or UNITY_EDITOR_PATH), requires no GitHub/cloud marker, uses unique result directories, private logs, strict real receipt/NUnit gates and allowlisted source export. Optional Windows build refuses old output. Checks existing UnityLockfile and takes a shared orchestration lock to avoid concurrent batch runs.
+- Refactored `Tools/run_unity_cloud.py` to delegate to the common command while retaining designated Windows/cloud/self-hosted guards and Artifacts/UnityCloud paths. No workflow/GitHub variables were enabled or dispatched. No automatic stage acceptance, commit, push or upload was added to standalone mode.
+- Moved receipt implementation to `Assets/Editor/FoundationValidation.cs`; preserved old CloudFoundationValidation class/method and its metadata as a forwarding public API. Both approved ignored result roots are accepted; case comparison follows the host OS. The real Editor still enforces its exact pinned version.
+- Added FoundationProjectSetup.ValidateConfiguration for actual URP/global/all-quality settings, player backend/API/window settings, editor settings and enabled scene. Receipt calls it after setup twice. Added two NUnit methods for idempotence/settings and keeping an already loaded foundation scene open. **All new/old Unity code remains uncompiled/unrun here.**
+- Total authored Unity tests now **9 EditMode + 1 PlayMode**, all unrun in Unity. Updated strict required-case names; no assertion disabled. Added 18 synthetic orchestration tests. These mock only the process boundary and exercise preflight, phase ordering, missing/stale/failed results, lock preservation/release, build-output guards, errors/timeouts, cloud compatibility and truthful reporting; they are **not engine/runtime evidence**.
+- Baseline/current unchanged original solution restore/build passed with **4 existing warnings** (CS9057 twice, xUnit2031, xUnit2009), **0 errors**. Actual standard VSTest **270 passed / 0 failed / 0 skipped**, fresh s1c-reference.trx accepted by strict parser. Portable suite **30 passed / 0 failed / 0 skipped** with one existing transitive CS9057 warning; preserved S2a sources/assertions unchanged.
+- Post-change foundation/MSBuild-isolation checks passed: **26 asset/folder GUIDs, 5 assemblies**. Root Core retained and every UnityProject C# file excluded. Python final run **50 passed / 0 failed** (8 foundation + 24 result-gate + 18 orchestration fixtures). Initial expanded run was 49 pass / 1 fail because a fixture's hard-coded count 9 now matched the actual required count; corrected the malformed-count fixture to use required-count + 1 and reran all 50 successfully.
+- Real CLI negative checks: standalone with an explicitly nonexistent Editor returned **1** at preflight with no tests/configuration evidence; cloud wrapper on this unmarked Linux machine returned **1** before Editor invocation. These expected failures prove refusal behavior, not successful Unity checks. Logs/summaries remain ignored under Artifacts.
+- Local actionlint 1.7.11 passed on the unchanged workflow. CLI help passed. Whitespace/source-scope/generated-file checks are performed before commit. No dependency pins changed; Python 3.9+ standard library suffices. URP Create API was reconfirmed in the same pinned official Graphics source; no installed Unity compatibility is inferred.
+- **Unperformed:** Editor installation/activation/import/UPM resolve/C# compilation, real lockfile and generated source settings/URP assets, all 10 Unity test methods, scene playback, desktop input/rendering/window checks, Windows build/player launch, recording/encoding, actual GitHub jobs and cross-runtime determinism. S1 acceptance stays incomplete. Cloud runner setup is deliberately excluded.
+- Handoff/run instructions are in README and Documentation/S1_CHECKLIST.md. Standalone output: Artifacts/UnityValidation/private-* and reports/standalone-*; no automatic upload. Raw logs/XML remain private and ignored. Review allowlisted generated-source candidates before committing them.
+
+Commands executed from repository root with .NET activated:
+
+```sh
+python3 UnityProject/Tools/validate_foundation.py --check-dotnet
+python3 -m unittest discover -s UnityProject/Tools -p 'test_*.py' -v
+dotnet restore CrowdCheckpointSim.sln --disable-parallel
+dotnet build CrowdCheckpointSim.sln --no-restore -m:2
+dotnet test tests/CrowdCheckpointSim.Tests/CrowdCheckpointSim.Tests.csproj --no-build --no-restore --results-directory UnityProject/Artifacts/Reference --logger 'trx;LogFileName=s1c-reference.trx'
+dotnet restore UnityProject/Validation/DomainParity.Tests/DomainParity.Tests.csproj --disable-parallel
+dotnet test UnityProject/Validation/DomainParity.Tests/DomainParity.Tests.csproj --no-restore --results-directory UnityProject/Artifacts/DomainParity --logger 'trx;LogFileName=s1c-parity.trx'
+python3 UnityProject/Tools/ci_results.py reference UnityProject/Artifacts/Reference/s1c-reference.trx
+python3 UnityProject/Tools/run_unity_validation.py --help
+# Expected exit 1, no Editor invocation:
+python3 UnityProject/Tools/run_unity_validation.py --editor /workspace/.onboarding/no-installed-Unity-Editor
+python3 UnityProject/Tools/run_unity_cloud.py
+actionlint -shellcheck= .github/workflows/unity-cloud-validation.yml
+git diff --check
+```
+
 ## External blockers and uncertain behavior
 
 - No usable installed Unity Editor/licence was established at prior checkpoints. Unity installer/release/documentation/package endpoints returned proxy 403; official Git/raw sources were reachable. No access/licensing change was reported; do not repeat blocked provisioning merely to continue source work. Version pins and package compatibility remain unverified in Unity.
@@ -167,14 +203,13 @@ git diff --check
 
 ## Exact next steps
 
-1. Identify the S2a local checkpoint with git log, inspect status/diff and **stop for approval to push that exact commit**. Do not infer push approval from permission to continue coding. Push only to origin/unity-migration, without force; verify remote SHA after explicit approval. Keep main unchanged; no PR.
-2. After the checkpoint is published and work is resumed, continue **S2b configuration/domain models**. Read original SimulationConfig, Pedestrian, CheckpointOperator, ResponderPost, ScenarioGeometry and corresponding tests first. Preserve defaults/ranges, clone/validation, init/required invariants, value equality and typed post aliases when adapting C# syntax. Split this further if needed.
-3. Add adapted source to Assets/Simulation and test the exact files through Validation/Domain. Add direct original comparisons plus meaningful shared Unity expectations; keep the 270 original tests and completed S2a checks intact. Do not port whole engine/UI in that small checkpoint.
-4. Then S2c covers geometry/math/RNG/reference-fixture infrastructure. Audit System.Random seeded behavior across runtimes without changing random-call order; actual Unity comparison stays unrun until Editor access exists. Do not introduce physics/NavMesh or silently accept behavior divergence.
-5. Source stages may proceed under the latest user direction while S1 validation is deferred. Keep stage completion labels honest; S1/S2 cannot be accepted without their actual Unity gates. Do not provision a runner or access a personal computer.
-6. When an Editor is later explicitly made available through an authorized environment, resume S1b: real package resolve, Configure twice, source settings/lock review, actual import/compile, 7 EditMode and 1 PlayMode tests, and separately Windows/desktop/encoding checks. Follow README and result gates; record actual counts/failures, never assumed success.
-7. Each further small checkpoint updates this status (files, remaining work, decisions, evidence and exact next steps), commits locally, then stops for its own push approval.
+1. Identify S1c's local checkpoint with git log and **stop for approval to push that exact commit**. S2a is already approved/published; do not ask to push it again. Push only this approved migration checkpoint without force and verify the remote SHA after approval. Keep main unchanged; no PR.
+2. **S1 preparation is authored and locally checked; actual S1b needs an explicitly authorized licensed Editor environment, not a cloud runner.** Do not provision a runner or access the user's computer. Do not invent generated lock/settings or mark S1 accepted based on Python/.NET tests.
+3. If an authorized Editor environment is available, follow README/Documentation/S1_CHECKLIST.md: close this project's Editor, run the standalone command with an explicit pinned Editor path, inspect actual Configure-twice receipt, fresh **9 EditMode + 1 PlayMode** results, errors, real UPM lock and generated source settings. Verify settings/asset GUIDs; review candidates before committing. Run desktop scene/window and optional Windows build/player checks separately and report them accurately. Fix real failures and rerun affected gates.
+4. If no Editor is available, S1's remaining import/generation/compile/test work stays blocked. Under the existing source-migration direction, the next source stage is **S2b configuration/domain models** after this checkpoint is published/resumed. Read original SimulationConfig, Pedestrian, CheckpointOperator, ResponderPost, ScenarioGeometry and corresponding tests; preserve defaults/ranges, clone/validation, init/required invariants, value equality and typed post aliases. Split into another small checkpoint; do not start the full engine/UI at once.
+5. Extend Assets/Simulation and the exact-source .NET Standard validation project with direct original comparisons and shared Unity expectations. Preserve all 270 original cases, S2a helpers and S1c tooling. S2c later covers geometry/math/RNG fixtures; preserve random-call order and investigate divergences.
+6. Each small source checkpoint updates this status, commits locally and stops for its own push approval. Keep S1/S2 incomplete until their actual Unity gates pass. Source implementation, mock/static/.NET checks and actual Unity evidence remain separate.
 
 ## Interruption recovery
 
-S2a is helper source plus .NET/reference validation only. No Unity process/cloud runner was started. Verify local/remote history and pending push approval before further work. Preserve the foundation scene/GUIDs, optional CI research and portable helpers/tests. Read Validation/README.md for boundaries; output under Artifacts/bin/obj is ignored. Resume S2b source work, not runner setup; leave S1 and S2 incomplete until actual Unity gates pass.
+Latest work is S1c runner-independent preparation plus synthetic orchestration checks. No Editor, runner or cloud job was started. Verify local/remote history and pending push approval before further work. Preserve S1a scene/GUIDs, optional CI tooling, S2a helpers/tests and new standalone command. Read Documentation/S1_CHECKLIST.md for S1 gates; use README's standalone command only when an authorized licensed Editor exists. Outputs/locks under Artifacts and bin/obj remain ignored. Without an Editor, resume S2b source work after publication; do not repeat runner setup or mark S1 complete.

@@ -14,6 +14,8 @@ REQUIRED_CASES = {
     "EditMode": {
         "CrowdCheckpoint.Unity.Tests.FoundationSceneTests.SerializedSceneHasOneBootstrapAndItsOrthographicCamera",
         "CrowdCheckpoint.Unity.Tests.FoundationSceneTests.FoundationSceneIsEnabledInBuildSettings",
+        "CrowdCheckpoint.Unity.Tests.FoundationConfigurationTests.ConfigureRetainsAssetIdentitiesAndAppliesAllFoundationSettings",
+        "CrowdCheckpoint.Unity.Tests.FoundationConfigurationTests.ValidationPreservesAnAlreadyLoadedFoundationScene",
         "CrowdCheckpoint.Unity.Tests.DomainHelperTests.TimingPreservesLegacyAndPercentageFatigue",
         "CrowdCheckpoint.Unity.Tests.DomainHelperTests.CatchFatigueAndCapacityKeepTheirFloors",
         "CrowdCheckpoint.Unity.Tests.DomainHelperTests.AcquisitionIncludesBoundaryAndRejectsInvalidRadii",

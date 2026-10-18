@@ -89,7 +89,8 @@ class CloudResultGateTests(unittest.TestCase):
             unity_results(self.result, "EditMode")
 
     def test_fabricated_counts_without_cases_are_rejected(self):
-        self.unity_fixture(total=9, passed=9)
+        inconsistent = len(REQUIRED_CASES["EditMode"]) + 1
+        self.unity_fixture(total=inconsistent, passed=inconsistent)
         with self.assertRaises(ResultError):
             unity_results(self.result, "EditMode")
 

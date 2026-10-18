@@ -6,6 +6,8 @@ Start with [MIGRATION_STATUS.md](MIGRATION_STATUS.md) and [MIGRATION_PLAN.md](MI
 
 **No cloud runner is being set up:** the user deferred it. Source stages continue with portable/reference checks while S1 stays incomplete. The preserved, disabled-by-default cloud setup research is in [Documentation/CLOUD_CI.md](Documentation/CLOUD_CI.md). Migration-branch pushes run ordinary .NET/Python checks; the opt-in Unity job is not enabled by this work. Do not access the user's computer.
 
+The S1 preparation/acceptance checklist is in [Documentation/S1_CHECKLIST.md](Documentation/S1_CHECKLIST.md). The remaining dependency is an actual licensed Editor environment; a cloud runner is optional.
+
 ## Toolchain requests and prerequisites
 
 - Exact requested Editor: **6000.3.26f1**. The version identity was verified in Unity's official reference-source tag, not by installing/running the Editor. This does not establish current download availability or compatibility.
@@ -19,10 +21,23 @@ Start with [MIGRATION_STATUS.md](MIGRATION_STATUS.md) and [MIGRATION_PLAN.md](MI
 2. Let UPM resolve the requested packages and wait for compilation. Record all failures and any necessary version changes; do not disable verification.
 3. Run **Tools > Crowd Checkpoint > Migration > Configure S1 Foundation**. This creates actual URP renderer/pipeline assets under `Assets/Settings/`, assigns graphics/quality settings, selects Windows Mono/.NET Standard and configures the scene. It refuses to overwrite an unrelated asset. This command is required because no Editor has generated those assets/settings yet.
 4. Open `Assets/Scenes/MigrationFoundation.unity` and enter Play Mode. Expect only an orthographic background and the explicit S1 diagnostic message. Do not expect a simulator or functional application controls.
-5. Run EditMode and PlayMode tests in Test Runner. There are **seven authored EditMode tests (two foundation and five domain helpers) and one PlayMode test**, all currently unrun in Unity.
+5. Run EditMode and PlayMode tests in Test Runner. There are **nine authored EditMode tests (four foundation and five domain helpers) and one PlayMode test**, all currently unrun in Unity.
 6. Review/commit Editor-generated source settings, `.meta` files and the real package lockfile in the next checkpoint; never commit `Library`, `Temp`, `UserSettings`, logs or licence files. Update the migration status with actual results. S1 stays incomplete until its gates pass.
 
 ## Batch entry points (not executed yet)
+
+With Python 3.9+ and an already licensed matching Editor on an explicitly authorized machine, one command runs setup twice, validates settings/scene, checks the real package lock, runs both suites and exports allowlisted source candidates. It needs **no GitHub/cloud runner**. It does not discover or connect to another machine. From the repository root in PowerShell:
+
+```powershell
+$UnityEditor = "C:\Program Files\Unity\Hub\Editor\6000.3.26f1\Editor\Unity.exe"
+python UnityProject/Tools/run_unity_validation.py --editor $UnityEditor
+# Optionally, with Windows build support and no existing Artifacts/WindowsFoundation output:
+python UnityProject/Tools/run_unity_validation.py --editor $UnityEditor --build-windows
+```
+
+Check the exit code and the printed `Artifacts/UnityValidation/reports/standalone-*/validation-summary.json`. Logs/XML remain in an ignored private run directory; the script never uploads them. Review generated source candidates before committing. Close this project's Editor before batch execution; interrupted runs may leave a lock which must be investigated before manual cleanup. PlayMode requires a suitable graphics/display environment. Successful orchestration does not mark S1 accepted or prove desktop visuals/player operation.
+
+For individual commands or diagnosis, use the entry points below. These have **not run in Unity** here.
 
 From the repository root in PowerShell, set `$UnityEditor` to the installed Editor executable and create the ignored output folder:
 

@@ -2,6 +2,8 @@
 
 **Current direction: cloud runner setup is deferred.** Preserve this historical research and opt-in tooling; do not provision or enable a runner. Source migration continues with portable/reference checks, while S1 stays incomplete. A cloud runner is optional infrastructure; actual Unity validation still needs a licensed Editor somewhere when that validation is resumed. Do not access the user's computer.
 
+S1c adds the standalone, runner-independent command in [../README.md](../README.md) and [S1_CHECKLIST.md](S1_CHECKLIST.md). The original cloud wrapper now delegates to the same orchestration with its Windows/cloud/self-hosted preflight still enforced. It retains `Artifacts/UnityCloud` output locations. The legacy Editor `CloudFoundationValidation.ConfigureAndReport` entry point is retained as a forwarding API to `FoundationValidation.ConfigureAndReport`.
+
 Recorded 2026-10-18. S1 remains **incomplete**. The existing Codex cloud machine has no usable Unity installation/licence and cannot reach Unity installer/registry endpoints. A separate cloud CI machine can have different network access. **No computer belonging to the user is accessed or required by this design.** No VM, subscription, paid runner, GitHub setting or CI run was created by this checkpoint.
 
 The user has **no confirmed existing CI licence**. Do not assume a paid entitlement, transferable Personal licence or permission to purchase anything. Actual Unity validation requires a supported licensed Editor environment. The deferred cloud option below would additionally require supported cloud activation and a runner.
